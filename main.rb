@@ -1,3 +1,23 @@
+def validate_inputs(size, my_position)
+    if my_position[0] <= 0
+        errors = "Your initial row must be filled"
+    elsif my_position[1] <= 0
+        errors = "Your initial column must be filled"
+    elsif size[0] <= 0
+        errors = "The number of rows in your matrix must be filled"
+    elsif size[1] <= 0
+        errors = "The number of columns in your matrix must be filled"
+    elsif my_position[0] >= size[0]
+        errors = "Your initial row exceeds the number of rows in matrix"
+    elsif my_position[1] >= size[1]
+        errors = "Your initial column exceeds the number of columns in matrix"
+    else
+        errors = ""
+    end
+
+    return errors
+end
+
 def draw_initial_grid(princess_position, my_position, size)
     grid = Array.new
 
@@ -60,23 +80,24 @@ end
 if __FILE__ == $0
     size = Array.new(2)
 
-    puts "Qual o numero de linhas da matriz? \n"
+    puts "Number of rows in your matrix?\n"
     size[0] = gets.chomp.to_i
 
-    puts "\nQual o numero de colunas da matriz? \n"
+    puts "\nNumber of columns in your matrix? \n"
     size[1] = gets.chomp.to_i
 
-    puts "\nEm qual linha você está? (OBS: a contagem começa com 1)\n"
+    puts "\nWhat will be your starting line? (PS: The count starts in 1)\n"
     my_row = gets.chomp.to_i - 1
 
-    puts "\nEm qual coluna você está? (OBS: a contagem começa com 1)\n"
+    puts "\nWhat will be your starting column? (PS: The count starts in 1)\n"
     my_column = gets.chomp.to_i - 1
     puts "\n"
 
     my_position = [my_row, my_column]
-
-    if my_position[0] >= size[0] || my_position[1] >= size[1]
-        puts "A posição que você se colocou está fora do tamanho máximo da matriz"
+    
+    errors = validate_inputs(size, my_position)
+    if !errors.empty?
+        puts errors
         return
     end
 
