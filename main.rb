@@ -80,10 +80,10 @@ end
 if __FILE__ == $0
     size = Array.new(2)
 
-    puts "Number of rows in your matrix?\n"
+    puts "Number of rows in your matrix:\n"
     size[0] = gets.chomp.to_i
 
-    puts "\nNumber of columns in your matrix? \n"
+    puts "\nNumber of columns in your matrix:\n"
     size[1] = gets.chomp.to_i
 
     puts "\nWhat will be your starting line? (PS: The count starts in 1)\n"
