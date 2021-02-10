@@ -92,4 +92,10 @@ if __FILE__ == $0
     rescue
         puts "Has no moves"
     end
+
+    places = size[0] * size[1]
+    qnt_moves = moves.length()
+    score = (places - qnt_moves) / 10.0
+    puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
+
 end
