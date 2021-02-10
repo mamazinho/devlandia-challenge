@@ -28,10 +28,10 @@ def process_move(princess_position, my_position)
 
     # Positions: 0 is the line and 1 is the column
     new_position = my_position
-    if princess_position[0] == my_position[0] and princess_position[1] < my_position[1]
+    if princess_position[0] == my_position[0] && princess_position[1] < my_position[1]
         move = "LEFT"
         new_position[1] = my_position[1] - 1 
-    elsif princess_position[0] == my_position[0] and princess_position[1] > my_position[1]
+    elsif princess_position[0] == my_position[0] && princess_position[1] > my_position[1]
         move = "RIGHT"
         new_position[1] = my_position[1] + 1 
     elsif princess_position[0] < my_position[0]
@@ -66,11 +66,11 @@ if __FILE__ == $0
     puts "\nQual o numero de colunas da matriz? \n"
     size[1] = gets.chomp.to_i
 
-    puts "\nEm qual linha você está? (OBS: 0 conta como a primeira linha)\n"
-    my_row = gets.chomp.to_i
+    puts "\nEm qual linha você está? (OBS: a contagem começa com 1)\n"
+    my_row = gets.chomp.to_i - 1
 
-    puts "\nEm qual coluna você está? (OBS: 0 conta como a primeira coluna)\n"
-    my_column = gets.chomp.to_i
+    puts "\nEm qual coluna você está? (OBS: a contagem começa com 1)\n"
+    my_column = gets.chomp.to_i - 1
     puts "\n"
 
     my_position = [my_row, my_column]
