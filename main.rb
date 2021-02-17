@@ -1,7 +1,7 @@
 def validate_inputs(size, my_position)
-  if my_position[0] <= 0
+  if my_position[0] < 0
     errors = "Your initial row must be filled"
-  elsif my_position[1] <= 0
+  elsif my_position[1] < 0
     errors = "Your initial column must be filled"
   elsif size[0] <= 0
     errors = "The number of rows in your matrix must be filled"
@@ -18,63 +18,92 @@ def validate_inputs(size, my_position)
   return errors
 end
 
-def draw_initial_grid(princess_position, my_position, size)
-  grid = Array.new
+class Main
 
-  (0...size[0]).each do |row|
-    grid[row] = Array.new
+  def initialize(my_position, princess_position, size)
+    @my_position = my_position
+    @princess_position = princess_position
+    @size = size
+    @moves = []
+    draw_initial_grid()
+    nextMove()
+    calc_result()
+  end
 
-    (0...size[1]).each do |column|
-      if row == princess_position[0] && column == princess_position[1]
-        grid[row][column] = "p"
-        next
+  def draw_initial_grid()
+    grid = Array.new
+
+    (0...@size[0]).each do |row|
+      grid[row] = Array.new
+
+      (0...@size[1]).each do |column|
+        if row == @princess_position[0] && column == @princess_position[1]
+          grid[row][column] = "p"
+          next
+        end
+        if row == @my_position[0] && column == @my_position[1]
+          grid[row][column] = "m"
+          next
+        end
+        grid[row][column] = "-"
       end
-      if row == my_position[0] && column == my_position[1]
-        grid[row][column] = "m"
-        next
-      end
-      grid[row][column] = "-"
+
+    end
+
+    grid.each do |line|
+      puts line.join(", ").gsub(",", "")
     end
 
   end
 
-  grid.each do |line|
-    puts line.join(", ").gsub(",", "")
+  def process_move()
+
+    # Positions: 0 is the line and 1 is the column
+    new_position = @my_position
+    if @princess_position[0] == @my_position[0] && @princess_position[1] < @my_position[1]
+      move = "LEFT"
+      new_position[1] = @my_position[1] - 1 
+    elsif @princess_position[0] == @my_position[0] && @princess_position[1] > @my_position[1]
+      move = "RIGHT"
+      new_position[1] = @my_position[1] + 1 
+    elsif @princess_position[0] < @my_position[0]
+      move = "UP"
+      new_position[0] = @my_position[0] - 1 
+    else
+      move = "DOWN"
+      new_position[0] = @my_position[0] + 1 
+    end
+    
+    return move, new_position
   end
+    
+  def nextMove()
+    move = ''
+    
+    to_move, @my_position = process_move()
+    @moves << to_move
 
-end
+    while @princess_position != @my_position
+      nextMove()
+    end
 
-def process_move(princess_position, my_position)
-
-  # Positions: 0 is the line and 1 is the column
-  new_position = my_position
-  if princess_position[0] == my_position[0] && princess_position[1] < my_position[1]
-    move = "LEFT"
-    new_position[1] = my_position[1] - 1 
-  elsif princess_position[0] == my_position[0] && princess_position[1] > my_position[1]
-    move = "RIGHT"
-    new_position[1] = my_position[1] + 1 
-  elsif princess_position[0] < my_position[0]
-    move = "UP"
-    new_position[0] = my_position[0] - 1 
-  else
-    move = "DOWN"
-    new_position[0] = my_position[0] + 1 
   end
   
-  return move, new_position
-end
+  def calc_result()
+    puts "\nAll moves #{@moves}"
   
-def nextMove(princess_position, my_position, moves=[])
-  move = ''
+    begin
+      puts "Last Move #{@moves.last}"
+    rescue
+      puts "Has no moves"
+    end
   
-  to_move, my_position = process_move(princess_position, my_position)
-  moves << to_move
-  while princess_position != my_position do
-    nextMove(princess_position, my_position, moves)
+    places = @size[0] * @size[1]
+    qnt_moves = @moves.length()
+    score = (places - qnt_moves) / 10.0
+    puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
   end
 
-  return moves
 end
 
 if __FILE__ == $0
@@ -103,20 +132,22 @@ if __FILE__ == $0
 
   princess_position = [rand(0...size[0]), rand(0...size[1])]
 
-  draw_initial_grid(princess_position, my_position, size)
-  moves = nextMove(princess_position, my_position)
+  Main.new(my_position, princess_position, size)
 
-  puts "\nAll moves #{moves}"
+  # draw_initial_grid(princess_position, my_position, size)
+  # moves = nextMove(princess_position, my_position)
 
-  begin
-    puts "Last Move #{moves.last}"
-  rescue
-    puts "Has no moves"
-  end
+  # puts "\nAll moves #{moves}"
 
-  places = size[0] * size[1]
-  qnt_moves = moves.length()
-  score = (places - qnt_moves) / 10.0
-  puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
+  # begin
+  #   puts "Last Move #{moves.last}"
+  # rescue
+  #   puts "Has no moves"
+  # end
+
+  # places = size[0] * size[1]
+  # qnt_moves = moves.length()
+  # score = (places - qnt_moves) / 10.0
+  # puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
 
 end
