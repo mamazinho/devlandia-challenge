@@ -12,22 +12,16 @@ class Main
     validate_inputs
     draw_initial_grid
     next_move
-    calc_result
+    calc_score
   end
 
   def validate_inputs
-    if (@my_position[0]).negative?
-      abort('Your initial row must be filled')
-    elsif (@my_position[1]).negative?
-      abort('Your initial column must be filled')
-    elsif @size[0] <= 0
-      abort('The number of rows in your matrix must be filled')
-    elsif @size[1] <= 0
-      abort('The number of columns in your matrix must be filled')
-    elsif @my_position[0] >= @size[0]
-      abort('Your initial row exceeds the number of rows in matrix')
-    elsif @my_position[1] >= @size[1]
-      abort('Your initial column exceeds the number of columns in matrix')
+    row_column = Hash[0 => 'row', 1 => 'column']
+    (0...2).each do |index|
+      rci = row_column[index]
+      (@my_position[index]).negative? ? abort("Your initial #{rci} must be filled") : nil
+      @size[index] <= 0 ? abort("The number of #{rci}s in your matrix must be filled") : nil
+      @my_position[index] >= @size[index] ? abort("Your initial #{rci} exceeds the number of #{rci}s in matrix") : nil
     end
   end
 
@@ -41,30 +35,12 @@ class Main
     end
   end
 
-  def process_move
-    if @princess_position[0] == @my_position[0] && @princess_position[1] < @my_position[1]
-      move = 'LEFT'
-      @my_position[1] -= 1
-    elsif @princess_position[0] == @my_position[0] && @princess_position[1] > @my_position[1]
-      move = 'RIGHT'
-      @my_position[1] += 1
-    elsif @princess_position[0] < @my_position[0]
-      move = 'UP'
-      @my_position[0] -= 1
-    else
-      move = 'DOWN'
-      @my_position[0] += 1
-    end
-
-    move
-  end
-
   def next_move
     @moves << process_move
     next_move while @princess_position != @my_position
   end
 
-  def calc_result
+  def calc_score
     puts "\nAll moves #{@moves}"
     puts "Last Move #{@moves.last}"
 
@@ -73,6 +49,27 @@ class Main
     score = (places - qnt_moves) / 10.0
     puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
     score
+  end
+
+  def process_move
+    move = move_direction
+    move == 'LEFT' ? @my_position[1] -= 1 : nil
+    move == 'RIGHT' ? @my_position[1] += 1 : nil
+    move == 'UP' ? @my_position[0] -= 1 : nil
+    move == 'DOWN' ? @my_position[0] += 1 : nil
+    move
+  end
+
+  def move_direction
+    if @princess_position[0] == @my_position[0] && @princess_position[1] < @my_position[1]
+      'LEFT'
+    elsif @princess_position[0] == @my_position[0] && @princess_position[1] > @my_position[1]
+      'RIGHT'
+    elsif @princess_position[0] < @my_position[0]
+      'UP'
+    else
+      'DOWN'
+    end
   end
 
   def put_members_on_grid(row)
