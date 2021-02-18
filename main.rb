@@ -2,7 +2,7 @@
 
 # This class represent all input process for you reach the princess
 # Positions: 0 is the line and 1 is the column during all program
-class Main
+class Match
   def initialize(my_position, princess_position, size)
     @my_position = my_position
     @princess_position = princess_position
@@ -110,5 +110,5 @@ if __FILE__ == $PROGRAM_NAME
 
   my_position = [my_row, my_column]
   princess_position = [rand(0...size[0]), rand(0...size[1])]
-  Main.new(my_position, princess_position, size)
+  Match.new(my_position, princess_position, size)
 end
