@@ -1,111 +1,102 @@
-class Main
+# frozen_string_literal: true
 
+class Main
   def initialize(my_position, princess_position, size)
     # Positions: 0 is the line and 1 is the column during all program
     @my_position = my_position
     @princess_position = princess_position
     @size = size
     @moves = []
-    validate_inputs()
-    draw_initial_grid()
-    nextMove()
-    calc_result()
+    validate_inputs
+    draw_initial_grid
+    nextMove
+    calc_result
   end
 
-  def validate_inputs()
-    if @my_position[0] < 0
-      abort("Your initial row must be filled")
-    elsif @my_position[1] < 0
-      abort("Your initial column must be filled")
+  def validate_inputs
+    if (@my_position[0]).negative?
+      abort('Your initial row must be filled')
+    elsif (@my_position[1]).negative?
+      abort('Your initial column must be filled')
     elsif @size[0] <= 0
-      abort("The number of rows in your matrix must be filled")
+      abort('The number of rows in your matrix must be filled')
     elsif @size[1] <= 0
-      abort("The number of columns in your matrix must be filled")
+      abort('The number of columns in your matrix must be filled')
     elsif @my_position[0] >= @size[0]
-      abort("Your initial row exceeds the number of rows in matrix")
+      abort('Your initial row exceeds the number of rows in matrix')
     elsif @my_position[1] >= @size[1]
-      abort("Your initial column exceeds the number of columns in matrix")
-    else
-      nil
+      abort('Your initial column exceeds the number of columns in matrix')
     end
   end
 
-  def draw_initial_grid()
-    grid = Array.new
+  def draw_initial_grid
+    grid = []
 
     (0...@size[0]).each do |row|
-      grid[row] = Array.new
+      grid[row] = []
 
       (0...@size[1]).each do |column|
         if row == @princess_position[0] && column == @princess_position[1]
-          grid[row][column] = "p"
+          grid[row][column] = 'p'
           next
         end
         if row == @my_position[0] && column == @my_position[1]
-          grid[row][column] = "m"
+          grid[row][column] = 'm'
           next
         end
-        grid[row][column] = "-"
+        grid[row][column] = '-'
       end
-
     end
 
     grid.each do |line|
-      puts line.join(", ").gsub(",", "")
+      puts line.join(', ').gsub(',', '')
     end
-
   end
 
-  def process_move()
-
+  def process_move
     new_position = @my_position
     if @princess_position[0] == @my_position[0] && @princess_position[1] < @my_position[1]
-      move = "LEFT"
-      new_position[1] = @my_position[1] - 1 
+      move = 'LEFT'
+      new_position[1] = @my_position[1] - 1
     elsif @princess_position[0] == @my_position[0] && @princess_position[1] > @my_position[1]
-      move = "RIGHT"
-      new_position[1] = @my_position[1] + 1 
+      move = 'RIGHT'
+      new_position[1] = @my_position[1] + 1
     elsif @princess_position[0] < @my_position[0]
-      move = "UP"
-      new_position[0] = @my_position[0] - 1 
+      move = 'UP'
+      new_position[0] = @my_position[0] - 1
     else
-      move = "DOWN"
-      new_position[0] = @my_position[0] + 1 
+      move = 'DOWN'
+      new_position[0] = @my_position[0] + 1
     end
-    
-    return move, new_position
-  end
-    
-  def nextMove()
 
-    to_move, @my_position = process_move()
+    [move, new_position]
+  end
+
+  def nextMove
+    to_move, @my_position = process_move
     @moves << to_move
 
-    while @princess_position != @my_position
-      nextMove()
-    end
-
+    nextMove while @princess_position != @my_position
   end
-  
-  def calc_result()
+
+  def calc_result
     puts "\nAll moves #{@moves}"
-  
+
     begin
       puts "Last Move #{@moves.last}"
-    rescue
-      puts "Has no moves"
+    rescue StandardError
+      puts 'Has no moves'
     end
-  
+
     places = @size[0] * @size[1]
-    qnt_moves = @moves.length()
+    qnt_moves = @moves.length
     score = (places - qnt_moves) / 10.0
     puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
     score
   end
-  
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   size = Array.new(2)
   my_position = Array.new(2)
   princess_position = Array.new(2)
@@ -125,6 +116,6 @@ if __FILE__ == $0
 
   my_position = [my_row, my_column]
   princess_position = [rand(0...size[0]), rand(0...size[1])]
-  
+
   Main.new(my_position, princess_position, size)
 end
