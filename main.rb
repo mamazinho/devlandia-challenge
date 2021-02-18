@@ -1,38 +1,33 @@
 class Main
 
-  def initialize()
+  def initialize(my_position, princess_position, size)
     # Positions: 0 is the line and 1 is the column during all program
-    @my_position = Array.new(2)
-    @princess_position = Array.new(2)
-    @size = Array.new(2)
+    @my_position = my_position
+    @princess_position = princess_position
+    @size = size
     @moves = []
-    get_inputs()
+    validate_inputs()
     draw_initial_grid()
     nextMove()
     calc_result()
   end
 
-  def get_inputs()
-
-    puts "Number of rows in your matrix:\n"
-    @size[0] = gets.chomp.to_i
-  
-    puts "\nNumber of columns in your matrix:\n"
-    @size[1] = gets.chomp.to_i
-  
-    puts "\nWhat will be your starting line? (PS: The count starts in 1)\n"
-    my_row = gets.chomp.to_i - 1
-  
-    puts "\nWhat will be your starting column? (PS: The count starts in 1)\n"
-    my_column = gets.chomp.to_i - 1
-    puts "\n"
-  
-    @my_position = [my_row, my_column]
-    
-    validate_inputs()
-  
-    @princess_position = [rand(0...@size[0]), rand(0...@size[1])]
-    
+  def validate_inputs()
+    if @my_position[0] < 0
+      abort("Your initial row must be filled")
+    elsif @my_position[1] < 0
+      abort("Your initial column must be filled")
+    elsif @size[0] <= 0
+      abort("The number of rows in your matrix must be filled")
+    elsif @size[1] <= 0
+      abort("The number of columns in your matrix must be filled")
+    elsif @my_position[0] >= @size[0]
+      abort("Your initial row exceeds the number of rows in matrix")
+    elsif @my_position[1] >= @size[1]
+      abort("Your initial column exceeds the number of columns in matrix")
+    else
+      nil
+    end
   end
 
   def draw_initial_grid()
@@ -82,8 +77,7 @@ class Main
   end
     
   def nextMove()
-    move = ''
-    
+
     to_move, @my_position = process_move()
     @moves << to_move
 
@@ -106,29 +100,31 @@ class Main
     qnt_moves = @moves.length()
     score = (places - qnt_moves) / 10.0
     puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
-  end
-
-  def validate_inputs()
-    if @my_position[0] < 0
-      abort("Your initial row must be filled")
-    elsif @my_position[1] < 0
-      abort("Your initial column must be filled")
-    elsif @size[0] <= 0
-      abort("The number of rows in your matrix must be filled")
-    elsif @size[1] <= 0
-      abort("The number of columns in your matrix must be filled")
-    elsif @my_position[0] >= @size[0]
-      abort("Your initial row exceeds the number of rows in matrix")
-    elsif @my_position[1] >= @size[1]
-      abort("Your initial column exceeds the number of columns in matrix")
-    else
-      nil
-    end
-  
+    score
   end
   
 end
 
 if __FILE__ == $0
-  Main.new
+  size = Array.new(2)
+  my_position = Array.new(2)
+  princess_position = Array.new(2)
+
+  puts "Number of rows in your matrix:\n"
+  size[0] = gets.chomp.to_i
+
+  puts "\nNumber of columns in your matrix:\n"
+  size[1] = gets.chomp.to_i
+
+  puts "\nWhat will be your starting line? (PS: The count starts in 1)\n"
+  my_row = gets.chomp.to_i - 1
+
+  puts "\nWhat will be your starting column? (PS: The count starts in 1)\n"
+  my_column = gets.chomp.to_i - 1
+  puts "\n"
+
+  my_position = [my_row, my_column]
+  princess_position = [rand(0...size[0]), rand(0...size[1])]
+  
+  Main.new(my_position, princess_position, size)
 end
