@@ -42,28 +42,25 @@ class Main
   end
 
   def process_move
-    new_position = @my_position
     if @princess_position[0] == @my_position[0] && @princess_position[1] < @my_position[1]
       move = 'LEFT'
-      new_position[1] = @my_position[1] - 1
+      @my_position[1] -= 1
     elsif @princess_position[0] == @my_position[0] && @princess_position[1] > @my_position[1]
       move = 'RIGHT'
-      new_position[1] = @my_position[1] + 1
+      @my_position[1] += 1
     elsif @princess_position[0] < @my_position[0]
       move = 'UP'
-      new_position[0] = @my_position[0] - 1
+      @my_position[0] -= 1
     else
       move = 'DOWN'
-      new_position[0] = @my_position[0] + 1
+      @my_position[0] += 1
     end
 
-    [move, new_position]
+    move
   end
 
   def next_move
-    to_move, @my_position = process_move
-    @moves << to_move
-
+    @moves << process_move
     next_move while @princess_position != @my_position
   end
 
