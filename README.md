@@ -17,8 +17,14 @@ You can access challenge details [here](https://www.hackerrank.com/challenges/sa
 ## How to install Ruby:
     $ sudo apt install ruby-full
 
+## How to install rspec:
+    $ sudo gem install rspec
+
 ## How to Run:
     $ ruby main.rb
+
+## How to Run Test:
+    $ rspec specs/
 
 ## Use case:
 

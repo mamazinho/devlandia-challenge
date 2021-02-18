@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 # This class represent all input process for you reach the princess
+# Positions: 0 is the line and 1 is the column during all program
 class Main
   def initialize(my_position, princess_position, size)
-    # Positions: 0 is the line and 1 is the column during all program
     @my_position = my_position
     @princess_position = princess_position
     @size = size
     @moves = []
+    @grid = Array.new(size[0]) { Array.new(size[1]) }
     validate_inputs
     draw_initial_grid
     next_move
@@ -31,25 +32,11 @@ class Main
   end
 
   def draw_initial_grid
-    grid = []
-
     (0...@size[0]).each do |row|
-      grid[row] = []
-
-      (0...@size[1]).each do |column|
-        if row == @princess_position[0] && column == @princess_position[1]
-          grid[row][column] = 'p'
-          next
-        end
-        if row == @my_position[0] && column == @my_position[1]
-          grid[row][column] = 'm'
-          next
-        end
-        grid[row][column] = '-'
-      end
+      put_members_on_grid(row)
     end
 
-    grid.each do |line|
+    @grid.each do |line|
       puts line.join(', ').gsub(',', '')
     end
   end
@@ -82,18 +69,29 @@ class Main
 
   def calc_result
     puts "\nAll moves #{@moves}"
-
-    begin
-      puts "Last Move #{@moves.last}"
-    rescue StandardError
-      puts 'Has no moves'
-    end
+    puts "Last Move #{@moves.last}"
 
     places = @size[0] * @size[1]
     qnt_moves = @moves.length
     score = (places - qnt_moves) / 10.0
     puts "My Score: #{score.round(2)} (#{places} places minus #{qnt_moves} moves, all over 10)"
     score
+  end
+
+  def put_members_on_grid(row)
+    (0...@size[1]).each do |column|
+      princess_is_here(row, column) ? (@grid[row][column] = 'p'; next) : nil
+      i_am_here(row, column) ? (@grid[row][column] = 'm'; next) : nil
+      @grid[row][column] = '-'
+    end
+  end
+
+  def princess_is_here(row, column)
+    row == @princess_position[0] && column == @princess_position[1]
+  end
+
+  def i_am_here(row, column)
+    row == @my_position[0] && column == @my_position[1]
   end
 end
 
