@@ -80,18 +80,21 @@ class Main
 
   def put_members_on_grid(row)
     (0...@size[1]).each do |column|
-      princess_is_here(row, column) ? (@grid[row][column] = 'p'; next) : nil
-      i_am_here(row, column) ? (@grid[row][column] = 'm'; next) : nil
+      the_princess_here?(row, column) ? next : nil
+      am_i_here?(row, column) ? next : nil
+
       @grid[row][column] = '-'
     end
   end
 
-  def princess_is_here(row, column)
-    row == @princess_position[0] && column == @princess_position[1]
+  def the_princess_here?(row, column)
+    is_here = row == @princess_position[0] && column == @princess_position[1]
+    is_here ? @grid[row][column] = 'p' : nil
   end
 
-  def i_am_here(row, column)
-    row == @my_position[0] && column == @my_position[1]
+  def am_i_here?(row, column)
+    is_here = row == @my_position[0] && column == @my_position[1]
+    is_here ? @grid[row][column] = 'm' : nil
   end
 end
 
