@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# This class represent all input process for you reach the princess
 class Main
   def initialize(my_position, princess_position, size)
     # Positions: 0 is the line and 1 is the column during all program
@@ -9,7 +10,7 @@ class Main
     @moves = []
     validate_inputs
     draw_initial_grid
-    nextMove
+    next_move
     calc_result
   end
 
@@ -72,11 +73,11 @@ class Main
     [move, new_position]
   end
 
-  def nextMove
+  def next_move
     to_move, @my_position = process_move
     @moves << to_move
 
-    nextMove while @princess_position != @my_position
+    next_move while @princess_position != @my_position
   end
 
   def calc_result
@@ -98,8 +99,6 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   size = Array.new(2)
-  my_position = Array.new(2)
-  princess_position = Array.new(2)
 
   puts "Number of rows in your matrix:\n"
   size[0] = gets.chomp.to_i
@@ -116,6 +115,5 @@ if __FILE__ == $PROGRAM_NAME
 
   my_position = [my_row, my_column]
   princess_position = [rand(0...size[0]), rand(0...size[1])]
-
   Main.new(my_position, princess_position, size)
 end
